@@ -45,7 +45,7 @@ void setup() {
    
    float vec [] = {2, 5};
    nw_net.set_initial_values(vec);
-   nw_net.get_values();
+   //nw_net.get_values();
    
   //FLAPPY BIRD SETUP 
   
@@ -139,13 +139,6 @@ void draw(){
     textAlign(CENTER);
     text("NEURONAL NETWORK", WIDTH + 50 + size/2, 100);
     
-    /*
-    //rectangle for display
-    noFill();
-    stroke(0);
-    strokeWeight(1);
-    rect(150, 150, size, size);
-    */
     
     //neural network display
     stroke(0);
@@ -159,12 +152,15 @@ void draw(){
     strokeWeight(1);
     rect(WIDTH, size + 100, size + 100, 200);
     text("distance to floor: " + bird.y, WIDTH + size/2 + 50, size + 200  );
-    text("distance to pipe: ", WIDTH + size/2 + 50, size + 250  );
+    text("distance to pipe: " + final_value, WIDTH + size/2 + 50, size + 250  );
    float vec [] = new float [2];
    vec[0] =  random(-1 , 1);
    vec[1] =  random(-1 , 1);
    nw_net.set_initial_values(vec);
    final_value = nw_net.get_values();
+   if(final_value[0] > 0.72){
+     bird.jump(); 
+   }
   
 }
 //works upper pipe crash
@@ -190,8 +186,7 @@ public void resetPipes(){
 void keyPressed(){   
  
     if(key == ENTER){
-      
-         restart(); 
+      restart(); 
       game_state = GameState.GAME;
       if(game_state == GameState.WELCOME){
          
