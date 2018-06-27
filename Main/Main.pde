@@ -35,6 +35,9 @@ int initial_pipe_x = 600;
   PImage nw_bkg_img;
   
   float final_value [] = new float [1];
+
+  float last_mills = millis();
+  float delay = 200;
   
 void setup() {
   size(1200,600);
@@ -158,9 +161,16 @@ void draw(){
    vec[1] =  random(-1 , 1);
    nw_net.set_initial_values(vec);
    final_value = nw_net.get_values();
-   if(final_value[0] > 0.72){
+   
+  if ((millis() - last_mills) > delay){    
+    //hace cosas
+    last_mills = millis();
+    
+     if(final_value[0] > 0){
      bird.jump(); 
    }
+  } 
+
   
 }
 //works upper pipe crash
