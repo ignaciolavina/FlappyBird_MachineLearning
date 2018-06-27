@@ -122,7 +122,7 @@ void draw(){
        for (int i = 0; i< max_pipes; i++){
          
          Pipe pipe = pipes[i];
-        text("int_nx_pipe" + int_nx_pipe, 100, 100);
+        //text("int_nx_pipe" + int_nx_pipe, 100, 100);
         //SCORE
         if(bird.x == pipe.x){
           bird.score++;
@@ -235,6 +235,10 @@ void draw(){
 //if((bird.y <= (pipes[i].y - pipes[i].SPACE/2)) ){
 
 public void restart(){
+      // to print the fit_function and see the bests birds
+     for (int i = 0; i < birds.length; i++){
+      println(birds[i].fit_function); 
+     }
     //println("RESET: " + bird.y);
     int_nx_pipe = 0;
     //best_nw_net = new NeuralNetwork(WIDTH+50, size, 2, 4, 2, 1);  
@@ -244,9 +248,7 @@ public void restart(){
      birds[i].nw_net = best_bird.nw_net;
      }
      
-     for (int i = 0; i < birds.length; i++){
-      println(birds[i].fit_function); 
-     }
+
      
      
     resetPipes();
