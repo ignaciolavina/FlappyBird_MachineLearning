@@ -20,7 +20,8 @@ public enum GameState {WELCOME, GAME, GAMEOVER};  // Different states of the gam
 GameState game_state = GameState.WELCOME;
 
 Bird bird;
-Bird [] birds = new Bird [5];
+int max_birds = 4;
+Bird [] birds = new Bird [max_birds];
 
 int score = 0;
 int high_score = 0;
@@ -67,7 +68,7 @@ void setup() {
   bird = new Bird();
   //Pipes creation
   
-  for (int i = 0; i<4; i++){
+  for (int i = 0; i< max_birds; i++){
    birds[i]= new Bird(i); 
   }
   
@@ -108,7 +109,7 @@ void draw(){
       imageMode(CENTER);
       
       //Pipes iteration
-      for (int i = 0; i<max_pipes; i++){
+      for (int i = 0; i< max_pipes; i++){
         Pipe pipe = pipes[i];
         pipe.draw();
         
@@ -138,7 +139,7 @@ void draw(){
       }//end pipes loop
       bird.draw();
       
-      for (int i = 0; i<4; i++){
+      for (int i = 0; i < max_birds; i++){
         birds[i].draw(); 
       }
       
@@ -205,7 +206,7 @@ public void restart(){
     int_nx_pipe = 0;
     best_nw_net = new NeuralNetwork(WIDTH+50, size, 2, 4, 2, 1);  
     bird.reset();
-    for (int i = 0; i< 4; i++){
+    for (int i = 0; i < max_birds; i++){
      birds[i].reset();
    }
     resetPipes();
