@@ -67,7 +67,7 @@ void setup() {
     initial_pipe_x += (WIDTH+40)/max_pipes;
   }
 }
-
+int int_nx_pipe = 0;
 
 void draw(){
 
@@ -103,9 +103,15 @@ void draw(){
         Pipe pipe = pipes[i];
         pipe.draw();
         
+        text("int_nx_pipe" + int_nx_pipe, 100, 100);
         //SCORE
         if(bird.x == pipe.x){
           score++;
+          int_nx_pipe++;
+          if (int_nx_pipe >= max_pipes){
+             int_nx_pipe = 0; 
+          }
+          
         }
         
         //CRASH WITH ROOF OR FLOOR
@@ -154,8 +160,8 @@ void draw(){
     stroke(0);
     strokeWeight(1);
     rect(WIDTH, size + 100, size + 100, 200);
-    text("distance to floor: " + bird.y, WIDTH + size/2 + 50, size + 200  );
-    text("distance to pipe: " + final_value, WIDTH + size/2 + 50, size + 250  );
+    text("distance x to floor: " + (pipes[int_nx_pipe].x - bird.x), WIDTH + size/2 + 50, size + 200  );
+    text("distance y to pipe: " + (pipes[int_nx_pipe].y - bird.y), WIDTH + size/2 + 50, size + 250  );
 
    
   if ((millis() - last_mills) > delay){    
@@ -163,12 +169,12 @@ void draw(){
     last_mills = millis();
     
        float vec [] = new float [2];
-       vec[0] =  random(-1 , 1);
-       vec[1] =  random(-1 , 1);
+       vec[0] =  (pipes[int_nx_pipe].x - bird.x);
+       vec[1] =  (pipes[int_nx_pipe].y - bird.y);
        nw_net.set_initial_values(vec);
        final_value = nw_net.get_values();
      if(final_value[0] > 0){
-     bird.jump(); 
+       bird.jump(); 
    }
   } 
 
@@ -179,6 +185,7 @@ void draw(){
 
 public void restart(){
     println("RESET: " + bird.y);
+    int_nx_pipe = 0;
     nw_net = new NeuralNetwork(WIDTH+50, size, 2, 4, 2, 1);  
     bird.reset();
     resetPipes();
