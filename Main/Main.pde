@@ -37,7 +37,7 @@ int initial_pipe_x = 600;
   float final_value [] = new float [1];
 
   float last_mills = millis();
-  float delay = 200;
+  float delay = 250;
   
 void setup() {
   size(1200,600);
@@ -156,16 +156,17 @@ void draw(){
     rect(WIDTH, size + 100, size + 100, 200);
     text("distance to floor: " + bird.y, WIDTH + size/2 + 50, size + 200  );
     text("distance to pipe: " + final_value, WIDTH + size/2 + 50, size + 250  );
-   float vec [] = new float [2];
-   vec[0] =  random(-1 , 1);
-   vec[1] =  random(-1 , 1);
-   nw_net.set_initial_values(vec);
-   final_value = nw_net.get_values();
+
    
   if ((millis() - last_mills) > delay){    
     //hace cosas
     last_mills = millis();
     
+       float vec [] = new float [2];
+       vec[0] =  random(-1 , 1);
+       vec[1] =  random(-1 , 1);
+       nw_net.set_initial_values(vec);
+       final_value = nw_net.get_values();
      if(final_value[0] > 0){
      bird.jump(); 
    }
@@ -178,11 +179,12 @@ void draw(){
 
 public void restart(){
     println("RESET: " + bird.y);
+    nw_net = new NeuralNetwork(WIDTH+50, size, 2, 4, 2, 1);  
     bird.reset();
     resetPipes();
     high_score = max(high_score, score);
     score = 0;
-    game_state = GameState.WELCOME;  
+    game_state = GameState.WELCOME; 
 }
 
 public void resetPipes(){
@@ -192,6 +194,8 @@ public void resetPipes(){
     initial_pipe_x += (WIDTH+40)/max_pipes;
   }
 }
+
+
 
 void keyPressed(){   
  

@@ -15,6 +15,9 @@ class Pipe{
       image(pipe_img, x, y - (pipe_img.height/2+SPACE/2));
       image(pipe_img, x, y + (pipe_img.height/2+SPACE/2));
        update();
+       
+       fill(0);
+       ellipse(x, y, 5, 5);
   }
   
   public void update(){
