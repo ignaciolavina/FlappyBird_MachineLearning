@@ -11,7 +11,7 @@ PImage startImg;
 
 static int WIDTH = 800;
 //static int HEIGHT = 600;
-static int SPACE = 230; //Space inside pipes to pass
+static int SPACE = 330; //Space inside pipes to pass
 
 int pos_background = 0;
 int vel_background = 2;
@@ -19,9 +19,9 @@ int vel_background = 2;
 public enum GameState {WELCOME, GAME, GAMEOVER};  // Different states of the game
 GameState game_state = GameState.WELCOME;
 
-Bird bird;
 int max_birds = 4;
 Bird [] birds = new Bird [max_birds];
+Bird best_bird;
 
 int score = 0;
 int high_score = 0;
@@ -65,12 +65,14 @@ void setup() {
   bkg_img=loadImage("./assets/background.png");
   bkg_img.resize(WIDTH, height);
   
-  bird = new Bird();
+  //bird = new Bird();
   //Pipes creation
   
   for (int i = 0; i< max_birds; i++){
    birds[i]= new Bird(i); 
   }
+  
+  best_bird = birds[0];
   
   for (int i = 0; i<max_pipes; i++){
     pipes[i] = new Pipe(initial_pipe_x);
@@ -79,8 +81,10 @@ void setup() {
 }
 int int_nx_pipe = 0;
 
-void draw(){
 
+void draw(){
+  String str = "";
+  
   switch(game_state){
     case WELCOME:
       imageMode(CORNER);
@@ -112,7 +116,12 @@ void draw(){
       for (int i = 0; i< max_pipes; i++){
         Pipe pipe = pipes[i];
         pipe.draw();
-        
+      }
+      for (int b = 0; b < birds.length; b++){
+        Bird bird = birds[b];
+       for (int i = 0; i< max_pipes; i++){
+         
+         Pipe pipe = pipes[i];
         text("int_nx_pipe" + int_nx_pipe, 100, 100);
         //SCORE
         if(bird.x == pipe.x){
@@ -126,27 +135,45 @@ void draw(){
         
         //CRASH WITH ROOF OR FLOOR
         if ((bird.y < 0) || (bird.y > WIDTH)){
-          restart();
+          bird.crash();
         }
         
         //CRASH WITH PIPES
         if(bird.x >=pipe.x - pipe.pipe_img.width/2 && bird.x <= pipe.x + pipe.pipe_img.width/2){
           if(abs(bird.y - pipes[i].y) > SPACE/2 - bird.birdImg.height/2){            
             bird.crash(); 
-            game_state = GameState.GAMEOVER;
+            //game_state = GameState.GAMEOVER;
           }        
         }
+       
       }//end pipes loop
-      bird.draw();
+       bird.draw();
+      }
       
+      
+      Boolean all_crashed = true;
+      str = "Pájaros: ";
       for (int i = 0; i < max_birds; i++){
-        birds[i].draw(); 
+        //birds[i].draw();
+        if (!birds[i].crashed){
+            best_bird = birds[i];
+            all_crashed = false;
+        }
+        str += "" + birds[i].crashed + ",";        
+      }
+      
+
+      if (all_crashed){        
+        game_state = GameState.GAMEOVER;
       }
       
       text("Score: " + score, 130, 50);
+      text("" + str, WIDTH + size/2 + 50, size + 250);
+      
+      
      break;
      case GAMEOVER:
-      
+      text("" + str, WIDTH/2, height/2 - 150);
       text("GAMEOVER", WIDTH/2, height/2 - 50);      
       text("score: " + score, WIDTH/2, height/2);
       text("Press ENTER to restart ", WIDTH/2, height/2 + 50);
@@ -168,6 +195,10 @@ void draw(){
     stroke(0);
     fill(0);
     best_nw_net.draw();
+    
+    //best bird draw
+    text("BEST BIRD", WIDTH + size/2 + 50, size + 150);
+    image(best_bird.birdImg, WIDTH + size/2 + 50, size + 250);
   //
   
   //INPUTS DISPLAY
@@ -175,8 +206,8 @@ void draw(){
     stroke(0);
     strokeWeight(1);
     rect(WIDTH, size + 100, size + 100, 200);
-    text("distance x to floor: " + (pipes[int_nx_pipe].x - bird.x), WIDTH + size/2 + 50, size + 200  );
-    text("distance y to pipe: " + (pipes[int_nx_pipe].y - bird.y), WIDTH + size/2 + 50, size + 250  );
+    //text("distance x to floor: " + (pipes[int_nx_pipe].x - best_bird.x), WIDTH + size/2 + 50, size + 200  );
+    //text("distance y to pipe: " + (pipes[int_nx_pipe].y - bird.y), WIDTH + size/2 + 50, size + 250  );
 
    /*
   if ((millis() - last_mills) > delay){    
@@ -202,10 +233,10 @@ void draw(){
 //if((bird.y <= (pipes[i].y - pipes[i].SPACE/2)) ){
 
 public void restart(){
-    println("RESET: " + bird.y);
+    //println("RESET: " + bird.y);
     int_nx_pipe = 0;
-    best_nw_net = new NeuralNetwork(WIDTH+50, size, 2, 4, 2, 1);  
-    bird.reset();
+    //best_nw_net = new NeuralNetwork(WIDTH+50, size, 2, 4, 2, 1);  
+    //bird.reset();
     for (int i = 0; i < max_birds; i++){
      birds[i].reset();
    }
@@ -238,7 +269,7 @@ void keyPressed(){
     }
     
     if(key == ' '){
-       bird.jump();
+       //bird.jump();
     }  
     if(key == 'r' || key == 'R'){
         restart();    

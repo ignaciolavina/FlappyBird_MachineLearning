@@ -1,15 +1,15 @@
 class Bird{
   
-   PImage birdImg;
-   PImage crashed_bird_img; 
-   int x, y;
-   int velocity = 0;
-   boolean crashed = false;
+   private PImage birdImg;
+   private PImage crashed_bird_img; 
+    int x, y;
+   private int velocity = 0;
+   private boolean crashed = false;
    
-   float last_mills = millis();
-   float delay = 250;
+   private float last_mills = millis();
+   private float delay = 450;
    
-   NeuralNetwork nw_net;
+   private NeuralNetwork nw_net;
   
   public Bird(){   
       birdImg =loadImage("./assets/birdo.png");
@@ -46,8 +46,8 @@ class Bird{
       last_mills = millis();
       
          float vec [] = new float [2];
-         vec[0] =  (pipes[int_nx_pipe].x - bird.x);
-         vec[1] =  (pipes[int_nx_pipe].y - bird.y);
+         vec[0] =  (pipes[int_nx_pipe].x - this.x);
+         vec[1] =  (pipes[int_nx_pipe].y - this.y);
          nw_net.set_initial_values(vec);
          final_value = nw_net.get_values();
        if(final_value[0] > 0){
@@ -73,6 +73,11 @@ class Bird{
      crashed = false;
      this.y = 200; 
      this.velocity = 0;
+     nw_net = new NeuralNetwork(WIDTH+50, size, 2, 4, 2, 1);
+  }
+  
+  public NeuralNetwork get_neural_netw(){
+    return this.nw_net;
   }
   
 }
