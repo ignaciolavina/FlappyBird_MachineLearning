@@ -13,6 +13,8 @@ class NeuralNetwork{
   int y_space = 0;
   int x_space = 0;
   
+  int initial_y = 100;
+  
   int neurons_interm_layer;
   int neurons_init_layer;
   int num_layers;
@@ -35,21 +37,21 @@ class NeuralNetwork{
     
     //creation of first neural layer
     for (int i = 0; i < neurons_init_layer; i++){
-       list_initial_layer[i] = new Neuron(initial_point, initial_point + y_space + i*y_space);
+       list_initial_layer[i] = new Neuron(initial_point, initial_y + y_space + i*y_space);
     }
     
     //creating second neural layer
     y_space = (size/(neurons_interm_layer+1)); //reset y
     for(int j = 0; j< num_layers; j++){
       for (int i = 0; i < neurons_interm_layer; i++){
-        list_interm_layer[i][j] = new Neuron(initial_point + x_space + j*x_space, initial_point + y_space + i*y_space);   
+        list_interm_layer[i][j] = new Neuron(initial_point + x_space + j*x_space, initial_y + y_space + i*y_space);   
       }
     }
     
     //Creating final output layer
     y_space = (size/(neurons_final_layer+1)); //reset y
     for(int i = 0; i < neurons_final_layer; i++){
-       list_final_layer[i] = new Neuron(initial_point + size, initial_point + y_space + i*y_space);
+       list_final_layer[i] = new Neuron(initial_point + size, initial_y + y_space + i*y_space);
        println("x: " + (initial_point + size) + ", y: " + (initial_point + y_space + i*y_space));
     }
     

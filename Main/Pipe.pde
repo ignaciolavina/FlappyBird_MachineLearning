@@ -20,7 +20,7 @@ class Pipe{
   public void update(){
     x -= VEL;
     if(x < -40){
-        x = width;
+        x = WIDTH;
         y = (int) random(200, height-200);
     }
   }
