@@ -48,13 +48,15 @@ class Neuron{
   }
   
   //Para el resto, obtiene el valor en funcion de los pesos de las conexiones y el valor anterior
-  public void final_value(){    
+  public float final_value(){    
+    sum = 0;
     for (int i = 0; i < list_connection_prev.size(); i++){
       sum += list_connection_prev.get(i).weight*list_connection_prev.get(i).neuron1.value;
       //println("bucl3 " + list_connection_prev.get(i).weight + ", " +list_connection_prev.get(i).neuron1.value + " (id): " + list_connection_prev.get(i).neuron1.id );
     }
     value = sum;
     println("el valor final de la neurona " + this.id + " es: " + value);
+    return value;
   }
   
   public void set_id(int id){

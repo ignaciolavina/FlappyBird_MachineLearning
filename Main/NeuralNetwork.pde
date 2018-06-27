@@ -97,7 +97,8 @@ class NeuralNetwork{
   }
   
   // CALCULO DE LOS VALORES DE CADA NEURONA
-  public void get_values(){
+  public float[] get_values(){
+    float [] final_value = new float [neurons_final_layer];
    for(int j = 0; j < num_layers; j++){
     for (int i = 0; i < neurons_interm_layer; i++){
         list_interm_layer[i][j].final_value();
@@ -105,8 +106,9 @@ class NeuralNetwork{
     }
     
     for (int i = 0; i < neurons_final_layer; i++){
-      list_final_layer[i].final_value();
+      final_value[i] = list_final_layer[i].final_value();
     }
+    return final_value;
   }
   
   // DRAW FUNCTION

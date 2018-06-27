@@ -34,16 +34,19 @@ int initial_pipe_x = 600;
   int size = 300;
   PImage nw_bkg_img;
   
+  float final_value [] = new float [1];
+  
 void setup() {
   size(1200,600);
   //NEURAL NETWORK SETUP
    nw_net = new NeuralNetwork(WIDTH+50, size, 2, 4, 2, 1);   
-   //bkg_img = loadImage("assets/bkg_img.png");
+   nw_bkg_img = loadImage("./assets/nw_bkg_img.png");
+   nw_bkg_img.resize(size + 100, height);
    
    float vec [] = {2, 5};
    nw_net.set_initial_values(vec);
    nw_net.get_values();
-   nw_bkg_img = loadImage("./assets/nw_bkg_img.png");
+   
   //FLAPPY BIRD SETUP 
   
   fill(0);
@@ -65,7 +68,6 @@ void setup() {
 
 void draw(){
 
-  
   switch(game_state){
     case WELCOME:
       imageMode(CORNER);
@@ -127,24 +129,42 @@ void draw(){
      
      break;
   }
-  
-    //neural network stuff
+     
+    //NEURAL NETWORK DRAWING STUFF
+    imageMode(CENTER);
+    image(nw_bkg_img, WIDTH + 50 + size/2, height/2);
     fill(0);
-  //image(bkg_img, 0, 0);
-  textSize(50);
-  textAlign(CENTER);
-  text("NEURONAL NETWORK", WIDTH/2, 100);
-  
-  //rectangle for display
-  noFill();
-  stroke(0);
-  strokeWeight(1);
-  rect(150, 150, size, size);
-  
-  //neural network display
-  fill(0);
-  nw_net.draw();
+    //image(bkg_img, 0, 0);
+    textSize(20);
+    textAlign(CENTER);
+    text("NEURONAL NETWORK", WIDTH + 50 + size/2, 100);
+    
+    /*
+    //rectangle for display
+    noFill();
+    stroke(0);
+    strokeWeight(1);
+    rect(150, 150, size, size);
+    */
+    
+    //neural network display
+    stroke(0);
+    fill(0);
+    nw_net.draw();
   //
+  
+  //INPUTS DISPLAY
+    noFill();
+    stroke(0);
+    strokeWeight(1);
+    rect(WIDTH, size + 100, size + 100, 200);
+    text("distance to floor: " + bird.y, WIDTH + size/2 + 50, size + 200  );
+    text("distance to pipe: ", WIDTH + size/2 + 50, size + 250  );
+   float vec [] = new float [2];
+   vec[0] =  random(-1 , 1);
+   vec[1] =  random(-1 , 1);
+   nw_net.set_initial_values(vec);
+   final_value = nw_net.get_values();
   
 }
 //works upper pipe crash
