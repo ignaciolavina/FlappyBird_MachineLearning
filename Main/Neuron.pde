@@ -55,7 +55,7 @@ class Neuron{
       //println("bucl3 " + list_connection_prev.get(i).weight + ", " +list_connection_prev.get(i).neuron1.value + " (id): " + list_connection_prev.get(i).neuron1.id );
     }
     value = sum;
-    println("el valor final de la neurona " + this.id + " es: " + value);
+    //println("el valor final de la neurona " + this.id + " es: " + value);
     return value;
   }
   

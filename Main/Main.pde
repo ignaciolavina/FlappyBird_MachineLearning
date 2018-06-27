@@ -19,11 +19,11 @@ int vel_background = 2;
 public enum GameState {WELCOME, GAME, GAMEOVER};  // Different states of the game
 GameState game_state = GameState.WELCOME;
 
-int max_birds = 4;
+int max_birds = 8;
 Bird [] birds = new Bird [max_birds];
 Bird best_bird;
 
-int score = 0;
+//int score = 0;
 int high_score = 0;
 
 int max_pipes = 3;
@@ -125,7 +125,7 @@ void draw(){
         text("int_nx_pipe" + int_nx_pipe, 100, 100);
         //SCORE
         if(bird.x == pipe.x){
-          score++;
+          bird.score++;
           int_nx_pipe++;
           if (int_nx_pipe >= max_pipes){
              int_nx_pipe = 0; 
@@ -167,7 +167,7 @@ void draw(){
         game_state = GameState.GAMEOVER;
       }
       
-      text("Score: " + score, 130, 50);
+      text("Score: " + best_bird.score, 130, 50);
       text("" + str, WIDTH + size/2 + 50, size + 250);
       
       
@@ -175,7 +175,7 @@ void draw(){
      case GAMEOVER:
       text("" + str, WIDTH/2, height/2 - 150);
       text("GAMEOVER", WIDTH/2, height/2 - 50);      
-      text("score: " + score, WIDTH/2, height/2);
+      text("score: " + best_bird.score, WIDTH/2, height/2);
       text("Press ENTER to restart ", WIDTH/2, height/2 + 50);
      
      break;
@@ -198,7 +198,7 @@ void draw(){
     
     //best bird draw
     text("BEST BIRD", WIDTH + size/2 + 50, size + 150);
-    image(best_bird.birdImg, WIDTH + size/2 + 50, size + 250);
+    image(best_bird.birdImg, WIDTH + 100 , size + 250);
   //
   
   //INPUTS DISPLAY
@@ -209,6 +209,7 @@ void draw(){
     textSize(20);
     text("distance x to next pipe: " + (pipes[int_nx_pipe].x - best_bird.x), WIDTH + size/2 + 50, size + 180  );
     text("distance y to next pipe: " + (pipes[int_nx_pipe].y - best_bird.y), WIDTH + size/2 + 50, size + 210  );
+    text("Fit function: " + best_bird.fit_function, WIDTH + size/2 + 100, size + 250);
 
    /*
   if ((millis() - last_mills) > delay){    
@@ -239,12 +240,18 @@ public void restart(){
     //best_nw_net = new NeuralNetwork(WIDTH+50, size, 2, 4, 2, 1);  
     //bird.reset();
     for (int i = 0; i < max_birds; i++){
-     birds[i].reset();
+     birds[i].reset(); // en reset crea una nueva neural network y luego la estoy sobreescribiendo otra vez, optimizar el método
      birds[i].nw_net = best_bird.nw_net;
-   }
+     }
+     
+     for (int i = 0; i < birds.length; i++){
+      println(birds[i].fit_function); 
+     }
+     
+     
     resetPipes();
-    high_score = max(high_score, score);
-    score = 0;
+    high_score = max(high_score, best_bird.score);
+    //score = 0;
     game_state = GameState.WELCOME; 
 }
 

@@ -52,7 +52,7 @@ class NeuralNetwork{
     y_space = (size/(neurons_final_layer+1)); //reset y
     for(int i = 0; i < neurons_final_layer; i++){
        list_final_layer[i] = new Neuron(initial_point + size, initial_y + y_space + i*y_space);
-       println("x: " + (initial_point + size) + ", y: " + (initial_point + y_space + i*y_space));
+       //println("x: " + (initial_point + size) + ", y: " + (initial_point + y_space + i*y_space));
     }
     
     //CONEXIONS!

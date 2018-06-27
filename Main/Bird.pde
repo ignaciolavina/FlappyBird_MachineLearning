@@ -10,6 +10,10 @@ class Bird{
    private float delay = 450;
    
    private NeuralNetwork nw_net;
+   
+   private float fit_function;
+   private float distance = 0;
+   private int score = 0;
   
   public Bird(){   
       birdImg =loadImage("./assets/birdo.png");
@@ -57,6 +61,7 @@ class Bird{
   }
   
   public void update(){
+      distance++;
       y += velocity;
       velocity ++;
   }
@@ -66,10 +71,14 @@ class Bird{
   }
   
   public void crash(){
+    fit_function = distance + 1000 * score;
     crashed = true;  
   }
   
   public void reset(){
+      distance = 0;
+      fit_function = 0;
+      score = 0;
      crashed = false;
      this.y = 200; 
      this.velocity = 0;
