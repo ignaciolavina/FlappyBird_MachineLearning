@@ -206,8 +206,9 @@ void draw(){
     stroke(0);
     strokeWeight(1);
     rect(WIDTH, size + 100, size + 100, 200);
-    //text("distance x to floor: " + (pipes[int_nx_pipe].x - best_bird.x), WIDTH + size/2 + 50, size + 200  );
-    //text("distance y to pipe: " + (pipes[int_nx_pipe].y - bird.y), WIDTH + size/2 + 50, size + 250  );
+    textSize(20);
+    text("distance x to next pipe: " + (pipes[int_nx_pipe].x - best_bird.x), WIDTH + size/2 + 50, size + 180  );
+    text("distance y to next pipe: " + (pipes[int_nx_pipe].y - best_bird.y), WIDTH + size/2 + 50, size + 210  );
 
    /*
   if ((millis() - last_mills) > delay){    
@@ -239,6 +240,7 @@ public void restart(){
     //bird.reset();
     for (int i = 0; i < max_birds; i++){
      birds[i].reset();
+     birds[i].nw_net = best_bird.nw_net;
    }
     resetPipes();
     high_score = max(high_score, score);
@@ -261,11 +263,7 @@ void keyPressed(){
     if(key == ENTER){
       restart(); 
       game_state = GameState.GAME;
-      if(game_state == GameState.WELCOME){
-         
-        
-      }else{
-      }
+
     }
     
     if(key == ' '){
