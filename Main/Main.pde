@@ -20,6 +20,7 @@ public enum GameState {WELCOME, GAME, GAMEOVER};  // Different states of the gam
 GameState game_state = GameState.WELCOME;
 
 Bird bird;
+Bird [] birds = new Bird [5];
 
 int score = 0;
 int high_score = 0;
@@ -30,24 +31,27 @@ int initial_pipe_x = 600;
 
 //NEURAL NETWORK STUFF
   static int id_number = 0;
-  NeuralNetwork nw_net;
+  NeuralNetwork best_nw_net;
   int size = 300;
   PImage nw_bkg_img;
   
   float final_value [] = new float [1];
-
+/*
   float last_mills = millis();
   float delay = 250;
+  */
+  NeuralNetwork [] nw_nets;
   
 void setup() {
   size(1200,600);
   //NEURAL NETWORK SETUP
-   nw_net = new NeuralNetwork(WIDTH+50, size, 2, 4, 2, 1);   
+   best_nw_net = new NeuralNetwork(WIDTH+50, size, 2, 4, 2, 1);
+   
    nw_bkg_img = loadImage("./assets/nw_bkg_img.png");
    nw_bkg_img.resize(size + 100, height);
    
-   float vec [] = {2, 5};
-   nw_net.set_initial_values(vec);
+   //float vec [] = {2, 5};
+   //best_nw_net.set_initial_values(vec);
    //nw_net.get_values();
    
   //FLAPPY BIRD SETUP 
@@ -62,6 +66,11 @@ void setup() {
   
   bird = new Bird();
   //Pipes creation
+  
+  for (int i = 0; i<4; i++){
+   birds[i]= new Bird(i); 
+  }
+  
   for (int i = 0; i<max_pipes; i++){
     pipes[i] = new Pipe(initial_pipe_x);
     initial_pipe_x += (WIDTH+40)/max_pipes;
@@ -128,6 +137,11 @@ void draw(){
         }
       }//end pipes loop
       bird.draw();
+      
+      for (int i = 0; i<4; i++){
+        birds[i].draw(); 
+      }
+      
       text("Score: " + score, 130, 50);
      break;
      case GAMEOVER:
@@ -152,7 +166,7 @@ void draw(){
     //neural network display
     stroke(0);
     fill(0);
-    nw_net.draw();
+    best_nw_net.draw();
   //
   
   //INPUTS DISPLAY
@@ -163,7 +177,7 @@ void draw(){
     text("distance x to floor: " + (pipes[int_nx_pipe].x - bird.x), WIDTH + size/2 + 50, size + 200  );
     text("distance y to pipe: " + (pipes[int_nx_pipe].y - bird.y), WIDTH + size/2 + 50, size + 250  );
 
-   
+   /*
   if ((millis() - last_mills) > delay){    
     //hace cosas
     last_mills = millis();
@@ -171,12 +185,15 @@ void draw(){
        float vec [] = new float [2];
        vec[0] =  (pipes[int_nx_pipe].x - bird.x);
        vec[1] =  (pipes[int_nx_pipe].y - bird.y);
-       nw_net.set_initial_values(vec);
-       final_value = nw_net.get_values();
+       best_nw_net.set_initial_values(vec);
+       final_value = best_nw_net.get_values();
      if(final_value[0] > 0){
+       for (int i = 0; i< 4; i++){
+         birds[i].jump();
+       }
        bird.jump(); 
    }
-  } 
+  } */
 
   
 }
@@ -186,8 +203,11 @@ void draw(){
 public void restart(){
     println("RESET: " + bird.y);
     int_nx_pipe = 0;
-    nw_net = new NeuralNetwork(WIDTH+50, size, 2, 4, 2, 1);  
+    best_nw_net = new NeuralNetwork(WIDTH+50, size, 2, 4, 2, 1);  
     bird.reset();
+    for (int i = 0; i< 4; i++){
+     birds[i].reset();
+   }
     resetPipes();
     high_score = max(high_score, score);
     score = 0;
